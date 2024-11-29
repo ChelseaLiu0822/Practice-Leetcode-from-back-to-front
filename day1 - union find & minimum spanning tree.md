@@ -1,4 +1,4 @@
-# disjoint set(union find)
+# Disjoint Set(Union Find)
 
 This method basically can help you find your ancestor.
 
@@ -6,7 +6,11 @@ if you want to figure out if  someone is in the same family with you, you need t
 
 when we need to add someone to the family, basically we need to add our ancestor as their ancestor's father. hahaha. So all the family members in their family tree need to change their ancestor.
 
+Here is a **example**. This can show you what specific question can we solve by using Disjoint Set.
 
+You want to determine if there is a **valid path** that exists from `node 1` to `node 3`.
+
+![Q1](pics\day1_0.png)
 
 ## code
 
@@ -37,11 +41,13 @@ public boolean judge(int u, int v){
 }
 ```
 
-## practice
+# Minimum Spanning Tree
 
-https://leetcode.com/problems/find-if-path-exists-in-graph?envType=problem-list-v2&envId=union-find&difficulty=EASY
+The basic problem of minimum spanning tree is to find the shortest distance connecting these nodes, as shown in the figure. There are two methods: Prim and Kruskal.
 
-# minimum spanning tree - prim
+![Question](pics\day1_1.png)
+
+## Prim
 
 minDist[]: record the nearest distance from each node to the minimum spanning tree
 
@@ -50,6 +56,8 @@ minDist[]: record the nearest distance from each node to the minimum spanning tr
 1. find the nearest node 
 2. add this node to the tree 
 3. update the minDist of the rest node
+
+### code
 
 ```java
 import java.util.*;
@@ -104,26 +112,125 @@ public class Main{
 }
 ```
 
-![image-20241116181604937](D:\sde\algorithm\pics\image-20241116181604937.png)
-
-# minimum spanning tree - kruskal
+## Kruskal
 
 sorting the edges + union find
 
-3 key
+Kruskal's idea:
+
+1. Sort the weights of the edges, because the smallest edge should be added to the spanning tree first
+2. Iterate through the sorted edges
+3. If the two nodes at the beginning and end of the edge are in the same set, it means that if this edge is connected, a cycle will appear in the graph
+4. If the two nodes at the beginning and end of the edge are not in the same set, add them to the minimum spanning tree and add the two nodes to the same set
+
+### code
+
+```java
+import java.util.*;
+
+class Edge {
+    int l, r, val;
+
+    Edge(int l, int r, int val) {
+        this.l = l;
+        this.r = r;
+        this.val = val;
+    }
+}
+
+public class Main {
+    private static int n = 10001;
+    private static int[] father = new int[n];
+
+    // Initialize the disjoint set
+    public static void init() {
+        for (int i = 0; i < n; i++) {
+            father[i] = i;
+        }
+    }
+
+    // Find operation for the disjoint set
+    public static int find(int u) {
+        if (u == father[u]) return u;
+        return father[u] = find(father[u]);
+    }
+
+    // Union operation for the disjoint set
+    public static void join(int u, int v) {
+        u = find(u);
+        v = find(v);
+        if (u == v) return;
+        father[v] = u;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int v = scanner.nextInt(); // Number of vertices
+        int e = scanner.nextInt(); // Number of edges
+        List<Edge> edges = new ArrayList<>();
+        int result_val = 0;
+
+        for (int i = 0; i < e; i++) {
+            int v1 = scanner.nextInt();
+            int v2 = scanner.nextInt();
+            int val = scanner.nextInt();
+            edges.add(new Edge(v1, v2, val));
+        }
+
+        // Perform Kruskal's algorithm
+        edges.sort(Comparator.comparingInt(edge -> edge.val));
+
+        // Initialize the disjoint set
+        init();
+
+        // Traverse edges from the smallest weight
+        for (Edge edge : edges) {
+            int x = find(edge.l);
+            int y = find(edge.r);
+
+            if (x != y) {
+                result_val += edge.val;
+                join(x, y);
+            }
+        }
+
+        System.out.println(result_val); // Output the total weight of the MST
+        scanner.close();
+    }
+}
+
+```
+
+
+
+
 
 # Comparison
 
 When the nodes is much more than the edges, we use Kruskal. Otherwise, we use prim.
 
-
-
-## practice
-
-https://leetcode.com/problems/min-cost-to-connect-all-points?envType=problem-list-v2&envId=minimum-spanning-tree
+# Practice
 
 1 The length property in java is for arrays. For example, if you declare an array and want to know the length of the array, you use the length property.
 
 2 The length() method in java is for strings. If you want to see the length of the string, you use the length() method.
 
 3 The size() method in java is for generic collections. If you want to see how many elements the generic has, call this method to check!
+
+## Q1 - Union Find
+
+https://leetcode.com/problems/find-if-path-exists-in-graph?envType=problem-list-v2&envId=union-find&difficulty=EASY
+
+![ans1](pics\day1_q1_notice.png)
+
+## Q2 - MST Prim
+
+https://leetcode.com/problems/min-cost-to-connect-all-points?envType=problem-list-v2&envId=minimum-spanning-tree
+
+![q2](pics\day1_q2_notice.png)
+
+## Q3 - MST Kruskal
+
+https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/?envType=problem-list-v2&envId=minimum-spanning-tree
+
+![q3](pics\day1_q3_notice.png)

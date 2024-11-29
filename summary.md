@@ -1,4 +1,0 @@
-# Summary
-
-*[Foreword](README.md)
-
