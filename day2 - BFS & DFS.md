@@ -8,6 +8,8 @@ Therefore, topological sorting is also a common method in graph theory to determ
 
 There are 2 algorithms for implementing topological sorting: **Kahn's algorithm (BFS) and DFS**
 
+The following is **BFS method**.(we won't talk about DFS method)
+
 When we do topological sorting, we should give priority to finding nodes with **in-degree 0**. Only when in-degree 0 is it the starting node.
 
 1. Find the node with in-degree 0 and add it to the result set
@@ -31,10 +33,10 @@ Then if we find that **the number of elements in the result set** **is not equal
 https://leetcode.com/problems/course-schedule/description/?envType=problem-list-v2&envId=topological-sort&difficulty=MEDIUM
 
 1. Initialization
-  `indegrees[numCourses]`: record the in-degree of the node
-  `List<List<Integer>> graph`: record the out-degree of the node
-  `List<Integer> result[numCourses]`: Topological sort result
-  `Queue<Integer> zeroindegree`: record nodes with zero in-degree
+    `indegrees[numCourses]`: record the in-degree of the node
+    `List<List<Integer>> graph`: record the out-degree of the node
+    `List<Integer> result[numCourses]`: Topological sort result
+    `Queue<Integer> zeroindegree`: record nodes with zero in-degree
 2. Steps
 Build indegrees and graph
 Traverse indegree: `zeroindegree.offer(i)`
